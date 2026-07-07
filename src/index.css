@@ -1,0 +1,159 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Bricolage Grotesque", "Figtree", system-ui, sans-serif;
+  --font-sans: "Figtree", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  --color-abyss: #01212b;
+  --color-ocean: #013a4b;
+  --color-ocean-2: #0a5566;
+  --color-lagoon: #0c8c9e;
+  --color-lagoon-soft: #7fe0d6;
+  --color-lagoon-deep: #0a6b78;
+  --color-sunset: #ff9f5a;
+  --color-coral: #ff7f66;
+  --color-sand: #ffd97d;
+  --color-foam: #eefaf7;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-abyss text-foam font-sans antialiased;
+}
+
+::selection {
+  background: var(--color-lagoon);
+  color: var(--color-abyss);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-lagoon);
+  outline-offset: 2px;
+}
+
+/* ---- Verre (glassmorphism) ---- */
+.glass {
+  background: color-mix(in srgb, var(--color-foam) 6%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-foam) 12%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.glass-strong {
+  background: color-mix(in srgb, var(--color-ocean) 72%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-foam) 14%, transparent);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* ---- Texte dégradé lagon -> sunset ---- */
+.text-gradient {
+  background: linear-gradient(
+    100deg,
+    var(--color-lagoon-soft) 0%,
+    var(--color-lagoon) 45%,
+    var(--color-sunset) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---- Animations ---- */
+@keyframes drift-a {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(6%, -5%) scale(1.1); }
+}
+
+@keyframes drift-b {
+  0%, 100% { transform: translate(0, 0) scale(1.05); }
+  50% { transform: translate(-5%, 4%) scale(0.95); }
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes strip-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-rise { animation: rise 0.7s ease-out both; }
+.animate-strip { animation: strip-in 0.45s ease-out both; }
+
+.anim-delay-100 { animation-delay: 0.1s; }
+.anim-delay-200 { animation-delay: 0.2s; }
+.anim-delay-300 { animation-delay: 0.3s; }
+.anim-delay-400 { animation-delay: 0.4s; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---- Carte Leaflet (thème Lagoon) ---- */
+.leaflet-container {
+  background: #012531;
+  font-family: var(--font-sans);
+}
+.leaflet-tooltip {
+  background: color-mix(in srgb, var(--color-ocean) 92%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-foam) 15%, transparent);
+  color: var(--color-foam);
+  border-radius: 8px;
+}
+.leaflet-tooltip-top:before {
+  border-top-color: color-mix(in srgb, var(--color-foam) 15%, transparent);
+}
+
+/* Lignes de routes animées */
+@keyframes route-dash {
+  to { stroke-dashoffset: -600; }
+}
+.route-line {
+  stroke-dasharray: 5 9;
+  animation: route-dash 40s linear infinite;
+}
+
+/* Contrôles de zoom Leaflet au thème Lagoon */
+.leaflet-control-zoom a {
+  background: color-mix(in srgb, var(--color-ocean) 88%, transparent) !important;
+  color: var(--color-foam) !important;
+  border-color: color-mix(in srgb, var(--color-foam) 12%, transparent) !important;
+}
+.leaflet-control-zoom a:hover {
+  background: var(--color-ocean-2) !important;
+  color: var(--color-lagoon-soft) !important;
+}
+
+/* ---- Apparition au scroll ---- */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---- Arcs de routes animés (carte) ---- */
+@keyframes dashmove {
+  to { stroke-dashoffset: -24; }
+}
+.route-line {
+  stroke-dasharray: 5 7;
+  animation: dashmove 1.4s linear infinite;
+}
